@@ -1,10 +1,6 @@
 def call(Map params) {
-    // Implementación de la función
-    // Accede a los parámetros usando params.abortPipeline y params.branchName
-
     def abortPipeline = params.abortPipeline ?: false
     def branchName = params.branchName ?: 'master'
-
     def scannerHome = tool 'sonar-scanner'
     
     withEnv(["PATH+SONAR=${scannerHome}/bin"]) {
@@ -20,9 +16,9 @@ def call(Map params) {
     script {
         timeout(time: 5, unit: 'MINUTES') {
             if (shouldAbortPipeline(abortPipeline, branchName)) {
-                error 'QualityGate ha fallado. Abortando el pipeline.'
+                error 'Quality Gate no funciono.'
             } else {
-                echo 'QualityGate ha sido superado. Continuando con el pipeline.'
+                echo 'Quality Gate si funciona.'
             }
         }
     }
@@ -32,7 +28,6 @@ def shouldAbortPipeline(boolean abortPipeline, String branchName) {
     if (branchName == 'master') {
         return true
     }
-
     if (branchName.startsWith('hotfix/')) {
         return true
     }
